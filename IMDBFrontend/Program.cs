@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 
-string connectionString = "Server=localhost;Database=IMDB;";
+string connectionString = "Server=localhost;Database=IMDB;" +
+               "Integrated security=True;TrustServerCertificate=True";
 int choice = 0;
 do
 {
@@ -38,10 +39,9 @@ int Menu()
     Console.WriteLine("1. Search for a movie");
     Console.WriteLine("2. Search for a person");
     Console.WriteLine("3. Add a movie");
-    Console.WriteLine("4. Add a person");
-    Console.WriteLine("5. Delete a movie");
-    Console.WriteLine("6. Update a movie");
-    Console.WriteLine("7. Exit");
+    Console.WriteLine("4. Delete a movie");
+    Console.WriteLine("5. Update a movie");
+    Console.WriteLine("6. Exit");
 
     int choice = Convert.ToInt32(Console.ReadLine());
     return choice;
@@ -54,9 +54,9 @@ void SearchMovie()
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
-        string query = "SELECT * FROM Movies WHERE Name like %@Name%";
+        string query = "SELECT * FROM Titles WHERE PrimaryTitle like @Name";
         SqlCommand command = new SqlCommand(query, connection);
-        command.Parameters.AddWithValue("@Name", movieName);
+        command.Parameters.AddWithValue("@Name", "%"+movieName+"%");
         SqlDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
@@ -72,9 +72,9 @@ void SearchPerson()
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
-        string query = "SELECT * FROM Persons WHERE Name like %@Name%";
+        string query = "SELECT * FROM Persons WHERE Name like @Name";
         SqlCommand command = new SqlCommand(query, connection);
-        command.Parameters.AddWithValue("@Name", personName);
+        command.Parameters.AddWithValue("@Name", "%"+personName+"%");
         SqlDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
@@ -92,7 +92,7 @@ void AddMovie()
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
-        string query = "INSERT INTO Movies (Name, Year) VALUES (@Name, @Year)";
+        string query = "INSERT INTO Titles (Name, Year) VALUES (@Name, @Year)";
         SqlCommand command = new SqlCommand(query, connection);
         command.Parameters.AddWithValue("@Name", movieName);
         command.Parameters.AddWithValue("@Year", year);
@@ -103,14 +103,14 @@ void AddMovie()
 
 void DeleteMovie()
 {
-    Console.WriteLine("Enter the name of the movie to delete");
-    string movieName = Console.ReadLine();
+    Console.WriteLine("Enter the id of the movie to delete");
+    int movieName = Convert.ToInt32(Console.ReadLine());
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
-        string query = "DELETE FROM Movies WHERE Name = @Name";
+        string query = "DELETE FROM Titles WHERE Id = @Id";
         SqlCommand command = new SqlCommand(query, connection);
-        command.Parameters.AddWithValue("@Name", movieName);
+        command.Parameters.AddWithValue("@Id", movieName);
         command.ExecuteNonQuery();
     }
 }
@@ -124,7 +124,7 @@ void UpdateMovie()
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
-        string query = "UPDATE Titles SET Year = @Year WHERE Name = @Name";
+        string query = "UPDATE Titles SET Year = @Year WHERE PrimaryTitle = @Name";
         SqlCommand command = new SqlCommand(query, connection);
         command.Parameters.AddWithValue("@Name", movieName);
         command.Parameters.AddWithValue("@Year", year);
