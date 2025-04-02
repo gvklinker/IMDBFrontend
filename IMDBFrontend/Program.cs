@@ -1,4 +1,4 @@
-﻿void Menu()
+﻿int Menu()
 {
     Console.WriteLine("Welcome to IMDB \n" +
         "Pick an option");
@@ -9,5 +9,8 @@
     Console.WriteLine("5. Delete a movie");
     Console.WriteLine("6. Update a movie");
     Console.WriteLine("7. Exit");
+
+    int choice = Convert.ToInt32(Console.ReadLine());
+    return choice;
 }
 
