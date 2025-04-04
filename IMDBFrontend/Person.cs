@@ -13,7 +13,7 @@ namespace IMDBFrontend
         public string Nconst { get; set; }
         public List<string> Professions { get; set; }
         public int BirthYear { get; set; }
-        public int DeathYear { get; set; }
+        public int? DeathYear { get; set; }
         public Person() {
             Professions = new List<string>();
         }
