@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using System.Data;
 
 string connectionString = "Server=localhost;Database=IMDB;" +
                "Integrated security=True;TrustServerCertificate=True";
@@ -62,6 +63,7 @@ void SearchMovie()
         {
             Console.WriteLine(reader["Name"]);
         }
+        connection.Close();
     }
 }
 
@@ -80,6 +82,7 @@ void SearchPerson()
         {
             Console.WriteLine(reader["Name"]);
         }
+        connection.Close();
     }
 }
 
@@ -97,21 +100,23 @@ void AddMovie()
         command.Parameters.AddWithValue("@Name", movieName);
         command.Parameters.AddWithValue("@Year", year);
         command.ExecuteNonQuery();
+        connection.Close();
     }
 }
 
 
 void DeleteMovie()
 {
-    Console.WriteLine("Enter the id of the movie to delete");
-    int movieName = Convert.ToInt32(Console.ReadLine());
+    Console.WriteLine("Enter the Tconst of the movie to delete");
+    string tconst = Console.ReadLine();
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
-        string query = "DELETE FROM Titles WHERE Id = @Id";
-        SqlCommand command = new SqlCommand(query, connection);
-        command.Parameters.AddWithValue("@Id", movieName);
-        command.ExecuteNonQuery();
+        SqlCommand cmd = new SqlCommand("DeleteTitle", connection);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.Add(new SqlParameter("@Tconst", tconst));
+        cmd.ExecuteNonQuery();
+        connection.Close();
     }
 }
 
@@ -129,5 +134,6 @@ void UpdateMovie()
         command.Parameters.AddWithValue("@Name", movieName);
         command.Parameters.AddWithValue("@Year", year);
         command.ExecuteNonQuery();
+        connection.Close();
     }
 }
