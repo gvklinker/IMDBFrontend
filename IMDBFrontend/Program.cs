@@ -99,10 +99,7 @@ void AddMovie()
     int year = Convert.ToInt32(Console.ReadLine());
     Console.WriteLine("Enter the end year of the title");
     int? endYear = Convert.ToInt32(Console.ReadLine());
-    if (endYear == 0)
-    {
-        endYear = null;
-    }
+    //if (endYear == 0) endYear = null;
     Console.WriteLine("Enter the new type of the title");
     int type = Convert.ToInt32(Console.ReadLine());
     if (type <= 0)
@@ -117,16 +114,16 @@ void AddMovie()
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
-        SqlCommand command = new SqlCommand("UpdateTitle", connection);
+        SqlCommand command = new SqlCommand("CreateTitle", connection);
         command.CommandType = CommandType.StoredProcedure;
         command.Parameters.Add(new SqlParameter("@Tconst", tconst));
-        command.Parameters.Add(new SqlParameter("@Name", name));
-        command.Parameters.Add(new SqlParameter("@Type", type));
-        command.Parameters.Add(new SqlParameter("@Year", year));
+        command.Parameters.Add(new SqlParameter("@PrimaryTitle", name));
+        command.Parameters.Add(new SqlParameter("@TitleType", type));
+        command.Parameters.Add(new SqlParameter("@StartYear", year));
         command.Parameters.Add(new SqlParameter("@EndYear", endYear));
         command.Parameters.Add(new SqlParameter("@OriginalTitle", originalTitle));
         command.Parameters.Add(new SqlParameter("@IsAdult", isAdult));
-        command.Parameters.Add(new SqlParameter("@Runtime", runtime));
+        command.Parameters.Add(new SqlParameter("@RuntimeMinutes", runtime));
         command.ExecuteNonQuery();
         connection.Close();
     }
@@ -173,8 +170,8 @@ void UpdateMovie()
         SqlCommand command = new SqlCommand("UpdateTitle", connection);
         command.CommandType = CommandType.StoredProcedure;
         command.Parameters.Add(new SqlParameter("@Tconst", tconst));
-        command.Parameters.Add(new SqlParameter("@Name", name));
-        command.Parameters.Add(new SqlParameter("@Year", year));
+        command.Parameters.Add(new SqlParameter("@PrimaryTitle", name));
+        command.Parameters.Add(new SqlParameter("@StartYear", year));
         command.Parameters.Add(new SqlParameter("@EndYear", endYear));
         command.Parameters.Add(new SqlParameter("@OriginalTitle", originalTitle));
         command.Parameters.Add(new SqlParameter("@IsAdult", isAdult));
