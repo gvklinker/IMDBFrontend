@@ -56,7 +56,7 @@ void SearchMovie()
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
-        string query = "SELECT * FROM Titles WHERE PrimaryTitle like @Name";
+        string query = "SELECT * FROM GetTitles(@Name)";
         SqlCommand command = new SqlCommand(query, connection);
         command.Parameters.AddWithValue("@Name", "%"+movieName+"%");
         SqlDataReader reader = command.ExecuteReader();
@@ -75,7 +75,7 @@ void SearchPerson()
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
-        string query = "SELECT * FROM Persons WHERE Name like @Name";
+        string query = "SELECT * FROM GetPERSONS(@Name)";
         SqlCommand command = new SqlCommand(query, connection);
         command.Parameters.AddWithValue("@Name", "%"+personName+"%");
         SqlDataReader reader = command.ExecuteReader();
@@ -89,17 +89,44 @@ void SearchPerson()
 
 void AddMovie()
 {
-    Console.WriteLine("Enter the name of the title");
-    string movieName = Console.ReadLine();
-    Console.WriteLine("Enter the year of the movie");
+    Console.WriteLine("Enter the tconst of the title");
+    string tconst = Console.ReadLine();
+    Console.WriteLine("Enter the primary title of the title");
+    string name = Console.ReadLine();
+    Console.WriteLine("Enter the original title of the title");
+    string originalTitle = Console.ReadLine();
+    Console.WriteLine("Enter the start year of the title");
     int year = Convert.ToInt32(Console.ReadLine());
+    Console.WriteLine("Enter the end year of the title");
+    int? endYear = Convert.ToInt32(Console.ReadLine());
+    if (endYear == 0)
+    {
+        endYear = null;
+    }
+    Console.WriteLine("Enter the new type of the title");
+    int type = Convert.ToInt32(Console.ReadLine());
+    if (type <= 0)
+    {
+        type = 1;
+    }
+    Console.WriteLine("Enter the new value for whether the title is for adults only (1 if it is, 0 if it isn't)");
+    int isAdult = Convert.ToInt32(Console.ReadLine());
+    Console.WriteLine("Enter the new runtime in minutes for the title");
+    int runtime = Convert.ToInt32(Console.ReadLine());
+
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
-        string query = "INSERT INTO Titles (Name, Year) VALUES (@Name, @Year)";
-        SqlCommand command = new SqlCommand(query, connection);
-        command.Parameters.AddWithValue("@Name", movieName);
-        command.Parameters.AddWithValue("@Year", year);
+        SqlCommand command = new SqlCommand("UpdateTitle", connection);
+        command.CommandType = CommandType.StoredProcedure;
+        command.Parameters.Add(new SqlParameter("@Tconst", tconst));
+        command.Parameters.Add(new SqlParameter("@Name", name));
+        command.Parameters.Add(new SqlParameter("@Type", type));
+        command.Parameters.Add(new SqlParameter("@Year", year));
+        command.Parameters.Add(new SqlParameter("@EndYear", endYear));
+        command.Parameters.Add(new SqlParameter("@OriginalTitle", originalTitle));
+        command.Parameters.Add(new SqlParameter("@IsAdult", isAdult));
+        command.Parameters.Add(new SqlParameter("@Runtime", runtime));
         command.ExecuteNonQuery();
         connection.Close();
     }
