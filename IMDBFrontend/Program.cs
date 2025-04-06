@@ -175,7 +175,7 @@ void UpdateMovie()
         command.Parameters.Add(new SqlParameter("@EndYear", endYear));
         command.Parameters.Add(new SqlParameter("@OriginalTitle", originalTitle));
         command.Parameters.Add(new SqlParameter("@IsAdult", isAdult));
-        command.Parameters.Add(new SqlParameter("@Runtime", runtime));
+        command.Parameters.Add(new SqlParameter("@RuntimeMinutes", runtime));
         command.ExecuteNonQuery();
         connection.Close();
     }
