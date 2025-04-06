@@ -62,7 +62,7 @@ void SearchMovie()
         SqlDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
-            Console.WriteLine(reader["Name"]);
+            Console.WriteLine(reader["PrimaryTitle"]);
         }
         connection.Close();
     }
