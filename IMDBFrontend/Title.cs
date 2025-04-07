@@ -8,7 +8,6 @@ namespace IMDBFrontend
 {
     public class Title
     {
-        public int Id { get; set; }
         public string PrimaryTitle { get; set; }
         public string? OriginalTitle { get; set; }
         public string Tconst { get; set; }
@@ -22,7 +21,9 @@ namespace IMDBFrontend
 
         public override string ToString()
         {
-            return $"{Id} {Tconst} {PrimaryTitle} {OriginalTitle} \n ";
+            return $"{Tconst} {PrimaryTitle} {OriginalTitle} \n " +
+                $"{Type} {Genres}" +
+                $"{StartYear} {EndYear}";
         }
     }
 }

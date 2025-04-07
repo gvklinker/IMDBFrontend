@@ -8,7 +8,6 @@ namespace IMDBFrontend
 {
     public class Person
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Nconst { get; set; }
         public List<string> Professions { get; set; }
@@ -16,6 +15,12 @@ namespace IMDBFrontend
         public int? DeathYear { get; set; }
         public Person() {
             Professions = new List<string>();
+        }
+
+        public override string ToString()
+        {
+            return $"{Nconst} {Name} {BirthYear} - {DeathYear}" +
+                $"{Professions}";
         }
     }
 }
