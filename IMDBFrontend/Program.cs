@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using IMDBFrontend;
+using Microsoft.Data.SqlClient;
 using System.Data;
 
 string connectionString = "Server=localhost;Database=IMDB;" +
@@ -53,6 +54,7 @@ void SearchMovie()
 {
     Console.WriteLine("Enter the name of the title");
     string movieName = Console.ReadLine();
+    //List<Title> titles = new List<Title>();
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
@@ -62,7 +64,9 @@ void SearchMovie()
         SqlDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
-            Console.WriteLine(reader["PrimaryTitle"]);
+            Title title = new Title() {Tconst = reader["Tconst"].ToString(), PrimaryTitle = reader["PrimaryTitle"].ToString(), OriginalTitle = reader["OriginalTitle"].ToString(), 
+                StartYear = Convert.ToInt32(reader["StartYear"]), EndYear = Convert.ToInt32(reader["EndYear"]), Type = reader["Type"].ToString(), Genres = reader["Genres"].ToString() };
+            title.ToString();
         }
         connection.Close();
     }
@@ -81,7 +85,9 @@ void SearchPerson()
         SqlDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
-            Console.WriteLine(reader["Name"]);
+            Person person = new Person() {Nconst = reader["Nconst"].ToString(), Name = reader["PrimaryName"].ToString(), BirthYear = Convert.ToInt32(reader["BirthYear"]), 
+                DeathYear = Convert.ToInt32(reader["DeathYear"]), Professions = reader["Professions"].ToString() };
+            person.ToString();
         }
         connection.Close();
     }

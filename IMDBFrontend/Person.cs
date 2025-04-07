@@ -10,11 +10,11 @@ namespace IMDBFrontend
     {
         public string Name { get; set; }
         public string Nconst { get; set; }
-        public List<string> Professions { get; set; }
+        public string Professions { get; set; }
         public int BirthYear { get; set; }
         public int? DeathYear { get; set; }
         public Person() {
-            Professions = new List<string>();
+            
         }
 
         public override string ToString()
