@@ -50,23 +50,73 @@ int Menu()
     return choice;
 }
 
-void SearchMovie()
+void SearchMovieX()
 {
     Console.WriteLine("Enter the name of the title");
     string movieName = Console.ReadLine();
+    string liked = string.Format("%{0}%", movieName);
     //List<Title> titles = new List<Title>();
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
         string query = "SELECT * FROM GetTitles(@Name)";
         SqlCommand command = new SqlCommand(query, connection);
-        command.Parameters.AddWithValue("@Name", "%"+movieName+"%");
+        command.Parameters.AddWithValue("@Name", liked);
         SqlDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
             Title title = new Title() {Tconst = reader["Tconst"].ToString(), PrimaryTitle = reader["PrimaryTitle"].ToString(), OriginalTitle = reader["OriginalTitle"].ToString(), 
-                StartYear = Convert.ToInt32(reader["StartYear"]), EndYear = Convert.ToInt32(reader["EndYear"]), Type = reader["Type"].ToString(), Genres = reader["Genres"].ToString() };
+                StartYear = reader["StartYear"].ToString(), EndYear = reader["EndYear"].ToString() , Type = reader["Type"].ToString(), Genres = reader["Genres"].ToString() };
             title.ToString();
+        }
+        connection.Close();
+    }
+}
+void SearchMovie()
+{
+    Console.WriteLine("Enter the name of the title");
+    string movieName = Console.ReadLine();
+    using (SqlConnection connection = new SqlConnection(connectionString))
+    {
+        connection.Open();
+        string query = "SELECT * FROM Titles WHERE PrimaryTitle LIKE @Name";
+        SqlCommand command = new SqlCommand(query, connection);
+        command.Parameters.AddWithValue("@Name", "%" + movieName + "%");
+        SqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            Title title = new Title()
+            {
+                Tconst = reader["Tconst"].ToString(),
+                PrimaryTitle = reader["PrimaryTitle"].ToString(),
+                OriginalTitle = reader["OriginalTitle"].ToString(),
+                StartYear = reader["StartYear"].ToString(),
+                EndYear = reader["EndYear"].ToString(),
+                //Type = reader["Type"].ToString(),
+                //Genres = reader["Genres"].ToString()
+            };
+            Console.WriteLine(title.ToString());
+        }
+        connection.Close();
+    }
+}
+
+void SearchPersonX()
+{
+    Console.WriteLine("Enter the name of the person");
+    string personName = Console.ReadLine();
+    using (SqlConnection connection = new SqlConnection(connectionString))
+    {
+        connection.Open();
+        string query = "SELECT * FROM GetPersons(@Name)";
+        SqlCommand command = new SqlCommand(query, connection);
+        command.Parameters.AddWithValue("@Name", "%"+personName+"%");
+        SqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            Person person = new Person() {Nconst = reader["Nconst"].ToString(), Name = reader["PrimaryName"].ToString(), BirthYear = Convert.ToInt32(reader["BirthYear"]), 
+                DeathYear = Convert.ToInt32(reader["DeathYear"]), Professions = reader["Professions"].ToString() };
+            Console.WriteLine(person.ToString()); 
         }
         connection.Close();
     }
@@ -79,19 +129,27 @@ void SearchPerson()
     using (SqlConnection connection = new SqlConnection(connectionString))
     {
         connection.Open();
-        string query = "SELECT * FROM GetPERSONS(@Name)";
+        string query = "SELECT * FROM Persons WHERE PrimaryName LIKE @Name";
         SqlCommand command = new SqlCommand(query, connection);
-        command.Parameters.AddWithValue("@Name", "%"+personName+"%");
+        command.Parameters.AddWithValue("@Name", "%" + personName + "%");
         SqlDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
-            Person person = new Person() {Nconst = reader["Nconst"].ToString(), Name = reader["PrimaryName"].ToString(), BirthYear = Convert.ToInt32(reader["BirthYear"]), 
-                DeathYear = Convert.ToInt32(reader["DeathYear"]), Professions = reader["Professions"].ToString() };
-            person.ToString();
+            Person person = new Person()
+            {
+                Nconst = reader["Nconst"].ToString(),
+                Name = reader["PrimaryName"].ToString(),
+                //BirthYear = Convert.ToInt32(reader["BirthYear"]),
+                //DeathYear = Convert.ToInt32(reader["DeathYear"]),
+                //Professions = reader["Professions"].ToString()
+            };
+            Console.WriteLine(person.ToString());
         }
         connection.Close();
     }
 }
+
+
 
 void AddMovie()
 {

@@ -13,8 +13,9 @@ namespace IMDBFrontend
         public string Tconst { get; set; }
         public string? Type { get; set; }
         public string Genres { get; set; }
-        public int StartYear { get; set; }
-        public int? EndYear { get; set; }
+        public string StartYear { get; set; }
+        public string? EndYear { get; set; }
+        public string? RunTimeMinutes { get; set; }
         public Title() {
             
         }
