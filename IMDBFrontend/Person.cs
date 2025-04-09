@@ -11,7 +11,7 @@ namespace IMDBFrontend
         public string Name { get; set; }
         public string Nconst { get; set; }
         public string Professions { get; set; }
-        public int BirthYear { get; set; }
+        public int? BirthYear { get; set; }
         public int? DeathYear { get; set; }
         public Person() {
             

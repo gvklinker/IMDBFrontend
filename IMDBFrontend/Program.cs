@@ -21,19 +21,22 @@ do
             AddMovie();
             break;
         case 4:
-            DeleteMovie();
+            AddPerson();
             break;
         case 5:
-            UpdateMovie();
+            DeleteMovie();
             break;
         case 6:
+            UpdateMovie();
+            break;
+        case 7:
             Console.WriteLine("Goodbye!");
             return;
         default:
             Console.WriteLine("Invalid choice");
             break;
     }
-} while (choice != 6);
+} while (choice != 7);
 
 int Menu()
 {
@@ -42,9 +45,10 @@ int Menu()
     Console.WriteLine("1. Search for a title");
     Console.WriteLine("2. Search for a person");
     Console.WriteLine("3. Add a title");
-    Console.WriteLine("4. Delete a title");
-    Console.WriteLine("5. Update a title");
-    Console.WriteLine("6. Exit");
+    Console.WriteLine("4. Add a person");
+    Console.WriteLine("5. Delete a title");
+    Console.WriteLine("6. Update a title");
+    Console.WriteLine("7. Exit");
 
     int choice = Convert.ToInt32(Console.ReadLine());
     return choice;
@@ -139,7 +143,7 @@ void SearchPerson()
             {
                 Nconst = reader["Nconst"].ToString(),
                 Name = reader["PrimaryName"].ToString(),
-                //BirthYear = Convert.ToInt32(reader["BirthYear"]),
+                BirthYear = Convert.ToInt32(reader["BirthYear"]),
                 //DeathYear = Convert.ToInt32(reader["DeathYear"]),
                 //Professions = reader["Professions"].ToString()
             };
@@ -193,6 +197,29 @@ void AddMovie()
     }
 }
 
+void AddPerson()
+{
+    Console.WriteLine("Enter the Nconst of the person");
+    string nconst = Console.ReadLine();
+    Console.WriteLine("Enter the name of the person");
+    string name = Console.ReadLine();
+    Console.WriteLine("Enter the birthyear of the person");
+    int year = Convert.ToInt32(Console.ReadLine());
+    Console.WriteLine("Enter the deathyear of the person");
+    int dYear = Convert.ToInt32(Console.ReadLine());
+
+    using (SqlConnection connection = new SqlConnection(connectionString))
+    {
+        SqlCommand command = new SqlCommand("CreatePerson", connection);
+        connection.Open();
+        command.Parameters.Add(new SqlParameter("@Nconst", nconst));
+        command.Parameters.Add(new SqlParameter("@PrimaryName", name));
+        command.Parameters.Add(new SqlParameter("@BirthYear", year));
+        command.Parameters.Add(new SqlParameter("@DeathYear", dYear ));
+        command.ExecuteNonQuery();
+        connection.Close();
+    }
+}
 
 void DeleteMovie()
 {
